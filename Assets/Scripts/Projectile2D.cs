@@ -1,0 +1,29 @@
+using UnityEngine;
+
+public class Projectile2D : MonoBehaviour
+{
+    [SerializeField] private Rigidbody2D myRB;
+    private GameManager gameManager;
+
+    private void Start()
+    {
+        myRB = GetComponent<Rigidbody2D>();
+        gameManager = FindObjectOfType<GameManager>();
+    }
+
+    private void Update()
+    {
+        float angle = Mathf.Atan2(myRB.velocity.y, myRB.velocity.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Diana")
+        {
+            Destroy(collision.gameObject);
+            Destroy(this.gameObject);
+            gameManager.count = gameManager.count + 1;
+        }
+    }
+}
